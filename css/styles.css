@@ -128,9 +128,9 @@ body {
 
 .section-title {
   color: var(--color-text-dark);
-  font-family: var(--font-primary);
+  font-family: var(--font-secondary);
   font-size: 2.25rem;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.2;
   margin-bottom: var(--spacing-lg);
 }
@@ -250,7 +250,7 @@ body {
   color: var(--color-secondary);
 }
 
-/* ==========================================================================
+Tea/* ==========================================================================
    Cards
    ========================================================================== */
 .card {
@@ -835,6 +835,86 @@ body {
   
   .section-title {
     font-size: 1.25rem;
+  }
+}
+
+/* ==========================================================================
+   About Section Additional Row
+   ========================================================================== */
+.about-additional-row {
+  display: grid;
+  height: 50vh;
+  width: 100%;
+  gap: 0;
+  grid-template-columns: 3fr 2fr;
+}
+
+.about-image-panel {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.about-image-panel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.about-text-panel {
+  background: var(--color-bg-accent-3);
+  padding: var(--spacing-2xl);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  background-image: url(../assets/images/make.png);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.about-text-title {
+  font-size: 2.25rem;
+  color: var(--color-text);
+  font-family: var(--font-primary);
+  margin-bottom: var(--spacing-md);
+  line-height: 1.3;
+}
+
+@media (max-width: 1024px) {
+  .about-additional-row {
+    grid-template-columns: 1fr;
+    height: auto;
+    min-height: 50vh;
+  }
+  
+  .about-image-panel,
+  .about-text-panel {
+    min-height: 50vh;
+  }
+  
+  .about-text-title {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-image-panel,
+  .about-text-panel {
+    min-height: 40vh;
+  }
+  
+  .about-text-title {
+    font-size: 1.3rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-text-title {
+    font-size: 1.125rem;
   }
 }
 
