@@ -65,10 +65,15 @@ function initializeNavigation() {
 
 // Form functionality
 function initializeForms() {
-    const contactForm = document.querySelector('#contact form');
+    const contactForm = document.getElementById('contactForm');
     if (contactForm) {
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const submitButton = this.querySelector('button[type="submit"]');
+            const messageDiv = document.getElementById('formMessage');
             
             // Basic form validation
             const requiredFields = this.querySelectorAll('[required]');
@@ -83,28 +88,84 @@ function initializeForms() {
                 }
             });
             
-            if (isValid) {
-                // Show success message
-                showNotification('Thank you! We\'ll be in touch within 24 hours.', 'success');
-                this.reset();
-            } else {
-                showNotification('Please fill in all required fields.', 'error');
+            if (!isValid) {
+                showFormMessage('Please fill in all required fields.', 'error');
+                return;
             }
+            
+            // Disable submit button and show loading
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<i data-lucide="loader-2" class="h-4 w-4 animate-spin"></i> Sending...';
+            
+            // Submit to endpoint (Web3Forms compatible)
+            fetch(this.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json().catch(() => ({})))
+            .then(data => {
+                if (data && (data.ok === true || data.success === true)) {
+                    showFormMessage('Thank you! We\'ll be in touch within 24 hours.', 'success');
+                    this.reset();
+                    // Reset checkbox styling
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    if (checkbox) {
+                        checkbox.checked = false;
+                        const checkIcon = checkbox.parentElement.querySelector('i[data-lucide="check"]');
+                        if (checkIcon) {
+                            checkIcon.style.opacity = '0';
+                        }
+                    }
+                } else {
+                    showFormMessage('Something went wrong. Please try again.', 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showFormMessage('Something went wrong. Please try again.', 'error');
+            })
+            .finally(() => {
+                // Re-enable submit button
+                submitButton.disabled = false;
+                submitButton.innerHTML = 'Send Inquiry';
+            });
         });
 
-        // Form field focus effects
-        const formInputs = contactForm.querySelectorAll('.form-input');
+        // Form field focus effects and validation
+        const formInputs = contactForm.querySelectorAll('input, textarea, select');
         formInputs.forEach(input => {
             input.addEventListener('focus', function() {
-                this.parentElement.classList.add('focused');
+                this.classList.remove('border-red-500');
             });
             
             input.addEventListener('blur', function() {
-                if (!this.value) {
-                    this.parentElement.classList.remove('focused');
-                }
+                validateField(this);
             });
         });
+    }
+}
+
+// Form message display function
+function showFormMessage(message, type) {
+    const messageDiv = document.getElementById('formMessage');
+    if (messageDiv) {
+        messageDiv.textContent = message;
+        messageDiv.className = `mt-4 text-sm p-3 rounded-md ${
+            type === 'success' ? 'bg-green-100 text-green-700 border border-green-200' : 
+            type === 'error' ? 'bg-red-100 text-red-700 border border-red-200' : 
+            'bg-blue-100 text-blue-700 border border-blue-200'
+        }`;
+        messageDiv.classList.remove('hidden');
+        
+        // Auto-hide success messages after 5 seconds
+        if (type === 'success') {
+            setTimeout(() => {
+                messageDiv.classList.add('hidden');
+            }, 5000);
+        }
     }
 }
 
