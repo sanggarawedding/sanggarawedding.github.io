@@ -929,6 +929,14 @@ body {
     object-fit: cover;
   }
   
+  /* Ensure embedded videos behave responsively like images */
+  .services-image-panel video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
   .services-text-panel {
     background: var(--color-bg-accent-3);
     padding: var(--spacing-2xl);

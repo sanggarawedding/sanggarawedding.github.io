@@ -36,11 +36,39 @@ function initializeNavigation() {
 
     // Mobile menu toggle
     const mobileMenuBtn = document.querySelector('[aria-label="Open menu"]');
-    const mobileMenu = document.querySelector('.mobile-menu');
+    const mobileMenu = document.getElementById('mobile-menu');
     
     if (mobileMenuBtn && mobileMenu) {
         mobileMenuBtn.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
+            const isOpen = mobileMenu.classList.toggle('hidden') === false;
+            // Update aria-expanded
+            mobileMenuBtn.setAttribute('aria-expanded', String(isOpen));
+            // Swap icon between menu and x
+            const iconEl = mobileMenuBtn.querySelector('i');
+            if (iconEl) {
+                iconEl.setAttribute('data-lucide', isOpen ? 'x' : 'menu');
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }
+            // Prevent body scroll when menu open
+            document.body.style.overflow = isOpen ? 'hidden' : '';
+        });
+
+        // Close on link click (for single-page anchors)
+        mobileMenu.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                mobileMenuBtn.setAttribute('aria-expanded', 'false');
+                const iconEl = mobileMenuBtn.querySelector('i');
+                if (iconEl) {
+                    iconEl.setAttribute('data-lucide', 'menu');
+                    if (typeof lucide !== 'undefined') {
+                        lucide.createIcons();
+                    }
+                }
+                document.body.style.overflow = '';
+            });
         });
     }
 
@@ -422,5 +450,4 @@ document.addEventListener('DOMContentLoaded', lazyLoadImages);
 
 // Export functions for global use
 window.smoothScrollTo = smoothScrollTo;
-window.filterPortfolio = filterPortfolio;
 window.showNotification = showNotification;
