@@ -250,7 +250,7 @@ body {
   color: var(--color-secondary);
 }
 
-Tea/* ==========================================================================
+/* ==========================================================================
    Cards
    ========================================================================== */
 .card {
@@ -917,6 +917,85 @@ Tea/* ==========================================================================
     font-size: 1.125rem;
   }
 }
+/* ==========================================================================
+   Services Section Additional Row
+   ========================================================================== */
+   .services-additional-row {
+    display: grid;
+    height: 60vh;
+    width: 100%;
+    gap: 0;
+    grid-template-columns: 2fr 3fr;
+  }
+  
+  .services-image-panel {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .services-image-panel img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .services-text-panel {
+    background: var(--color-bg-accent-3);
+    padding: var(--spacing-2xl);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    background-image: url(../assets/images/make.png);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .services-text-title {
+    font-size: 2.25rem;
+    color: var(--color-text);
+    font-family: var(--font-primary);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.3;
+  }
+  
+  @media (max-width: 1024px) {
+    .services-additional-row {
+      grid-template-columns: 1fr;
+      height: auto;
+      min-height: 50vh;
+    }
+    
+    .services-image-panel,
+    .services-text-panel {
+      min-height: 50vh;
+    }
+    
+    .services-text-title {
+      font-size: 1.5rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .services-image-panel,
+    .services-text-panel {
+      min-height: 40vh;
+    }
+    
+    .services-text-title {
+      font-size: 1.3rem;
+    }
+  }
+  
+  @media (max-width: 640px) {
+    .services-text-title {
+      font-size: 1.125rem;
+    }
+  }
 
 /* ==========================================================================
    Accessibility
